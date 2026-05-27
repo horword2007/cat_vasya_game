@@ -1,0 +1,40 @@
+from abc import ABC, abstractmethod
+import math
+
+class Unit(ABC):
+    def __init__(self, strength, dexterity, constitution, wisdom, intelligence, charisma):
+        self.strength = strength
+        self.dexterity = dexterity
+        self.constitution = constitution
+        self.wisdom = wisdom
+        self.intelligence = intelligence
+        self.charisma = charisma
+        self.spells = []
+        self.mana = 0
+
+    @abstractmethod
+    def calculate_max_health(self):
+        pass
+
+    @abstractmethod
+    def calculate_damage(self):
+        pass
+
+    @abstractmethod
+    def calculate_defense(self):
+        pass
+
+    def add_spell(self, spell):
+        self.spells.append(spell)
+
+    def cast_spell(self, index):
+        if index < 0 or index >= len(self.spells):
+            raise IndexError("Заклинание не найдено")
+        
+        spell = self.spells[index]
+        
+        if self.mana < spell.mana_cost:
+            raise ValueError("Не хватает маны")
+        
+        self.mana -= spell.mana_cost
+        return spell.cast(self)
